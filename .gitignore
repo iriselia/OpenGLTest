@@ -4,6 +4,8 @@
 *.o
 *.obj
 !bin_debug/*.obj
+build/
+*.lik
 
 # Precompiled Headers
 *.gch

@@ -1,3 +1,22 @@
+/* Module      : main
+ * Author      : Yong Piao
+ * Email       : ypiao@wpi.edu
+ * Course      : CS4732
+ *
+ * Description : Project 0 executable main.
+ *
+ * Date        : 10/30/2014
+ *
+ * History:
+ * Revision      Date          Changed By
+ * --------      ----------    ----------
+ * 01.00         10/30/2014		Yong Piao
+ * First release.
+ *
+ * (c) Copyright 2013, Worcester Polytechnic Institute.
+ */
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 // Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,25 +27,37 @@
 
 // Include GLFW
 #include <glfw3.h>
-GLFWwindow* window;
+
 
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
+// Common utils
 #include <common/shader.hpp>
 #include <common/texture.hpp>
 #include <common/controls.hpp>
 #include <common/objloader.hpp>
 #include <common/vboindexer.hpp>
 
-int main( void )
+/* -- DATA STRUCTURES ---------------------------------------------------- */
+
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+GLFWwindow* g_pWindow;
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
+
+
+
+
+int main(void)
 {
+
+#pragma region GLFW/GLEW Initialization
 	// Initialise GLFW
-	if( !glfwInit() )
+	if (!glfwInit())
 	{
-		fprintf( stderr, "Failed to initialize GLFW\n" );
+		fprintf(stderr, "Failed to initialize GLFW\n");
 		return -1;
 	}
 
@@ -36,24 +67,26 @@ int main( void )
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window = glfwCreateWindow( 1024, 768, "Tutorial 16 - Shadows", NULL, NULL);
-	if( window == NULL ){
-		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
+	g_pWindow = glfwCreateWindow(1024, 768, "Computer Animation Project 0", NULL, NULL);
+	if (g_pWindow == NULL)
+	{
+		fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(g_pWindow);
 
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
-	if (glewInit() != GLEW_OK) {
+	if (glewInit() != GLEW_OK)
+	{
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		return -1;
 	}
 
 	// Ensure we can capture the escape key being pressed below
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-	glfwSetCursorPos(window, 1024/2, 768/2);
+	glfwSetInputMode(g_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
+	glfwSetCursorPos(g_pWindow, 1024 / 2, 768 / 2);
 
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -62,24 +95,26 @@ int main( void )
 	glEnable(GL_DEPTH_TEST);
 
 	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS); 
+	glDepthFunc(GL_LESS);
 
 	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
+#pragma endregion
 
+#pragma region Resource Loading
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
-	GLuint depthProgramID = LoadShaders( "DepthRTT.vertexshader", "DepthRTT.fragmentshader" );
+	GLuint depthProgramID = LoadShaders("DepthRTT.vert", "DepthRTT.frag");
 
 	// Get a handle for our "MVP" uniform
 	GLuint depthMatrixID = glGetUniformLocation(depthProgramID, "depthMVP");
 
 	// Load the texture
 	GLuint Texture = loadDDS("uvmap.DDS");
-	
+
 	// Read our .obj file
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
@@ -129,32 +164,32 @@ int main( void )
 	GLuint depthTexture;
 	glGenTextures(1, &depthTexture);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT16, 1024, 1024, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-		 
+
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture, 0);
 
 	// No color output in the bound framebuffer, only depth.
 	glDrawBuffer(GL_NONE);
 
 	// Always check that our framebuffer is ok
-	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		return false;
 
-	
+
 	// The quad's FBO. Used only for visualizing the shadowmap.
-	static const GLfloat g_quad_vertex_buffer_data[] = { 
+	static const GLfloat g_quad_vertex_buffer_data[] = {
 		-1.0f, -1.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,
-		-1.0f,  1.0f, 0.0f,
-		-1.0f,  1.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
 	};
 
 	GLuint quad_vertexbuffer;
@@ -163,15 +198,15 @@ int main( void )
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 
 	// Create and compile our GLSL program from the shaders
-	GLuint quad_programID = LoadShaders( "Passthrough.vertexshader", "SimpleTexture.fragmentshader" );
+	GLuint quad_programID = LoadShaders("Passthrough.vert", "SimpleTexture.frag");
 	GLuint texID = glGetUniformLocation(quad_programID, "texture");
 
 
 	// Create and compile our GLSL program from the shaders
-	GLuint programID = LoadShaders( "ShadowMapping.vertexshader", "ShadowMapping.fragmentshader" );
+	GLuint programID = LoadShaders("ShadowMapping.vert", "ShadowMapping.frag");
 
 	// Get a handle for our "myTextureSampler" uniform
-	GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
 	// Get a handle for our "MVP" uniform
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
@@ -179,17 +214,17 @@ int main( void )
 	GLuint ModelMatrixID = glGetUniformLocation(programID, "M");
 	GLuint DepthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
 	GLuint ShadowMapID = glGetUniformLocation(programID, "shadowMap");
-	
+
 	// Get a handle for our "LightPosition" uniform
 	GLuint lightInvDirID = glGetUniformLocation(programID, "LightInvDirection_worldspace");
+#pragma endregion
 
-
-	
-	do{
+	do
+	{
 
 		// Render to our framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
-		glViewport(0,0,1024,1024); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+		glViewport(0, 0, 1024, 1024); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 
 		// We don't use bias in the shader, but instead we draw back faces, 
 		// which are already separated from the front faces by a small distance 
@@ -203,11 +238,11 @@ int main( void )
 		// Use our shader
 		glUseProgram(depthProgramID);
 
-		glm::vec3 lightInvDir = glm::vec3(0.5f,2,2);
+		glm::vec3 lightInvDir = glm::vec3(0.5f, 2, 2);
 
 		// Compute the MVP matrix from the light's point of view
-		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
-		glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+		glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 		// or, for spot light :
 		//glm::vec3 lightPos(5, 20, 20);
 		//glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
@@ -230,7 +265,7 @@ int main( void )
 			GL_FALSE,           // normalized?
 			0,                  // stride
 			(void*)0            // array buffer offset
-		);
+			);
 
 		// Index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
@@ -241,7 +276,7 @@ int main( void )
 			indices.size(),    // count
 			GL_UNSIGNED_SHORT, // type
 			(void*)0           // element array buffer offset
-		);
+			);
 
 		glDisableVertexAttribArray(0);
 
@@ -249,7 +284,7 @@ int main( void )
 
 		// Render to the screen
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glViewport(0,0,1024,768); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+		glViewport(0, 0, 1024, 768); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
@@ -267,13 +302,13 @@ int main( void )
 		//ViewMatrix = glm::lookAt(glm::vec3(14,6,4), glm::vec3(0,1,0), glm::vec3(0,1,0));
 		glm::mat4 ModelMatrix = glm::mat4(1.0);
 		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
-		
+
 		glm::mat4 biasMatrix(
-			0.5, 0.0, 0.0, 0.0, 
+			0.5, 0.0, 0.0, 0.0,
 			0.0, 0.5, 0.0, 0.0,
 			0.0, 0.0, 0.5, 0.0,
 			0.5, 0.5, 0.5, 1.0
-		);
+			);
 
 		glm::mat4 depthBiasMVP = biasMatrix*depthMVP;
 
@@ -306,7 +341,7 @@ int main( void )
 			GL_FALSE,           // normalized?
 			0,                  // stride
 			(void*)0            // array buffer offset
-		);
+			);
 
 		// 2nd attribute buffer : UVs
 		glEnableVertexAttribArray(1);
@@ -318,7 +353,7 @@ int main( void )
 			GL_FALSE,                         // normalized?
 			0,                                // stride
 			(void*)0                          // array buffer offset
-		);
+			);
 
 		// 3rd attribute buffer : normals
 		glEnableVertexAttribArray(2);
@@ -330,7 +365,7 @@ int main( void )
 			GL_FALSE,                         // normalized?
 			0,                                // stride
 			(void*)0                          // array buffer offset
-		);
+			);
 
 		// Index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
@@ -341,7 +376,7 @@ int main( void )
 			indices.size(),    // count
 			GL_UNSIGNED_SHORT, // type
 			(void*)0           // element array buffer offset
-		);
+			);
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
@@ -351,7 +386,7 @@ int main( void )
 		// Optionally render the shadowmap (for debug only)
 
 		// Render only on a corner of the window (or we we won't see the real rendering...)
-		glViewport(0,0,512,512);
+		glViewport(0, 0, 512, 512);
 
 		// Use our shader
 		glUseProgram(quad_programID);
@@ -372,7 +407,7 @@ int main( void )
 			GL_FALSE,           // normalized?
 			0,                  // stride
 			(void*)0            // array buffer offset
-		);
+			);
 
 		// Draw the triangle !
 		// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
@@ -381,12 +416,12 @@ int main( void )
 
 
 		// Swap buffers
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(g_pWindow);
 		glfwPollEvents();
 
 	} // Check if the ESC key was pressed or the window was closed
-	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		   glfwWindowShouldClose(window) == 0 );
+	while (glfwGetKey(g_pWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+	glfwWindowShouldClose(g_pWindow) == 0);
 
 	// Cleanup VBO and shader
 	glDeleteBuffers(1, &vertexbuffer);
