@@ -1,3 +1,23 @@
+/* Module      : vboindexer.cpp
+* Author      : Yong Piao
+* Email       : ypiao@wpi.edu
+* Course      : CS4732
+*
+* Description : Model data processor:
+*				combines all vertex data into our VBO layout.
+*
+* Date        : 10/30/2014
+*
+* History:
+* Revision      Date          Changed By
+* --------      ----------    ----------
+* 01.00         10/30/2014		Yong Piao
+* First release.
+*
+* (c) Copyright 2013, Worcester Polytechnic Institute.
+*/
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 #include <vector>
 #include <map>
 
@@ -7,6 +27,11 @@
 
 #include <string.h> // for memcmp
 
+/* -- DATA STRUCTURES ---------------------------------------------------- */
+
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
 
 // Returns true iif v1 can be considered equal to v2
 bool is_near(float v1, float v2){

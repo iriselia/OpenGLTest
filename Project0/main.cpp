@@ -49,7 +49,15 @@ GLFWwindow* window;
 static int delta_t = 0;
 
 
-
+/* ----------------------------------------------------------------------- */
+/* Function    : int(void)
+ *
+ * Description : The main execution procedure of Project 0
+ *
+ * Parameters  : No Params
+ *
+ * Returns     : returns and int to indicate execution result
+ */
 int main(void)
 {
 

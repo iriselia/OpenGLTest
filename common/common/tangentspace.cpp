@@ -1,7 +1,31 @@
+/* Module      : tangentspace.cpp
+* Author      : Yong Piao
+* Email       : ypiao@wpi.edu
+* Course      : CS4732
+*
+* Description : Model tangent calculater; currently unused.
+*
+* Date        : 10/30/2014
+*
+* History:
+* Revision      Date          Changed By
+* --------      ----------    ----------
+* 01.00         10/30/2014		Yong Piao
+* First release.
+*
+* (c) Copyright 2013, Worcester Polytechnic Institute.
+*/
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 #include <vector>
 #include <glm/glm.hpp>
-
 #include "tangentspace.hpp"
+/* -- DATA STRUCTURES ---------------------------------------------------- */
+
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
+
 
 void computeTangentBasis(
 	// inputs

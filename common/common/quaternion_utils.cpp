@@ -1,3 +1,22 @@
+/* Module      : quaternion_utils.cpp
+* Author      : Yong Piao
+* Email       : ypiao@wpi.edu
+* Course      : CS4732
+*
+* Description : Some basic math utility functions.
+*
+* Date        : 10/30/2014
+*
+* History:
+* Revision      Date          Changed By
+* --------      ----------    ----------
+* 01.00         10/30/2014		Yong Piao
+* First release.
+*
+* (c) Copyright 2013, Worcester Polytechnic Institute.
+*/
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -5,6 +24,13 @@
 using namespace glm;
 
 #include "quaternion_utils.hpp"
+/* -- DATA STRUCTURES ---------------------------------------------------- */
+
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
+
+
 
 
 // Returns a quaternion such that q*start = dest

@@ -1,3 +1,22 @@
+/* Module      : texture.cpp
+* Author      : Yong Piao
+* Email       : ypiao@wpi.edu
+* Course      : CS4732
+*
+* Description : Texture loading functions. Currently supports BMP and DDS.
+*
+* Date        : 10/30/2014
+*
+* History:
+* Revision      Date          Changed By
+* --------      ----------    ----------
+* 01.00         10/30/2014		Yong Piao
+* First release.
+*
+* (c) Copyright 2013, Worcester Polytechnic Institute.
+*/
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,6 +24,13 @@
 #include <GL/glew.h>
 
 #include <glfw3.h>
+
+/* -- DATA STRUCTURES ---------------------------------------------------- */
+
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
+
 
 
 GLuint loadBMP_custom(const char * imagepath){

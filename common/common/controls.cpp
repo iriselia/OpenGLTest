@@ -1,3 +1,23 @@
+/* Module      : controls.cpp
+ * Author      : Yong Piao
+ * Email       : ypiao@wpi.edu
+ * Course      : CS4732
+ *
+ * Description : Processes mouse and keyboard input
+ *				and generates view and projection matrices
+ *
+ * Date        : 10/30/2014
+ *
+ * History:
+ * Revision      Date          Changed By
+ * --------      ----------    ----------
+ * 01.00         10/30/2014		Yong Piao
+ * First release.
+ *
+ * (c) Copyright 2013, Worcester Polytechnic Institute.
+ */
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 // Include GLFW
 #include <glfw3.h>
 extern GLFWwindow* window; // The "extern" keyword here is to access the variable "window" declared in tutorialXXX.cpp. This is a hack to keep the tutorials simple. Please avoid this.
@@ -8,20 +28,16 @@ extern GLFWwindow* window; // The "extern" keyword here is to access the variabl
 using namespace glm;
 
 #include "controls.hpp"
+/* -- DATA STRUCTURES ---------------------------------------------------- */
 
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
 glm::mat4 ViewMatrix;
 glm::mat4 ProjectionMatrix;
 
-glm::mat4 getViewMatrix(){
-	return ViewMatrix;
-}
-glm::mat4 getProjectionMatrix(){
-	return ProjectionMatrix;
-}
-
-
 // Initial position : on +Z
-glm::vec3 position = glm::vec3( 5, 5, -10 ); 
+glm::vec3 position = glm::vec3(5, 5, -10);
 // Initial horizontal angle : toward -Z
 float horizontalAngle = -0.4f;// 3.14f;
 // Initial vertical angle : none
@@ -34,6 +50,13 @@ float mouseSpeed = 0.003f;
 
 glm::vec2 lastMousePos = glm::vec2(0, 0);
 glm::vec2 mouseStartPos = glm::vec2(0, 0);
+
+glm::mat4 getViewMatrix(){
+	return ViewMatrix;
+}
+glm::mat4 getProjectionMatrix(){
+	return ProjectionMatrix;
+}
 
 void computeMatricesFromInputs(){
 

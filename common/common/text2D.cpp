@@ -1,3 +1,22 @@
+/* Module      : text2D.cpp
+* Author      : Yong Piao
+* Email       : ypiao@wpi.edu
+* Course      : CS4732
+*
+* Description : GL Texture creation procedure
+*
+* Date        : 10/30/2014
+*
+* History:
+* Revision      Date          Changed By
+* --------      ----------    ----------
+* 01.00         10/30/2014		Yong Piao
+* First release.
+*
+* (c) Copyright 2013, Worcester Polytechnic Institute.
+*/
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 #include <vector>
 #include <cstring>
 
@@ -11,7 +30,11 @@ using namespace glm;
 #include "texture.hpp"
 
 #include "text2D.hpp"
+/* -- DATA STRUCTURES ---------------------------------------------------- */
 
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
 unsigned int Text2DTextureID;
 unsigned int Text2DVertexBufferID;
 unsigned int Text2DUVBufferID;

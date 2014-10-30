@@ -1,3 +1,22 @@
+/* Module      : shader.cpp
+* Author      : Yong Piao
+* Email       : ypiao@wpi.edu
+* Course      : CS4732
+*
+* Description : Shader parser
+*
+* Date        : 10/30/2014
+*
+* History:
+* Revision      Date          Changed By
+* --------      ----------    ----------
+* 01.00         10/30/2014		Yong Piao
+* First release.
+*
+* (c) Copyright 2013, Worcester Polytechnic Institute.
+*/
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -12,7 +31,11 @@ using namespace std;
 #include <GL/glew.h>
 
 #include "shader.hpp"
+/* -- DATA STRUCTURES ---------------------------------------------------- */
 
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
 const std::string shaderPath = "shaders/";
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path){

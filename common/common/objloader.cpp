@@ -1,3 +1,22 @@
+/* Module      : objloader.cpp
+ * Author      : Yong Piao
+ * Email       : ypiao@wpi.edu
+ * Course      : CS4732
+ *
+ * Description : A simple parser for .obj format
+ *
+ * Date        : 10/30/2014
+ *
+ * History:
+ * Revision      Date          Changed By
+ * --------      ----------    ----------
+ * 01.00         10/30/2014		Yong Piao
+ * First release.
+ *
+ * (c) Copyright 2013, Worcester Polytechnic Institute.
+ */
+
+/* -- INCLUDE FILES ------------------------------------------------------ */
 #include <vector>
 #include <stdio.h>
 #include <string>
@@ -6,10 +25,13 @@
 #include <glm/glm.hpp>
 
 #include "objloader.hpp"
+/* -- DATA STRUCTURES ---------------------------------------------------- */
 
-// Very, VERY simple OBJ loader.
-// Here is a short list of features a real function would provide : 
-// - Binary files. Reading a model should be just a few memcpy's away, not parsing a file at runtime. In short : OBJ is not very great.
+/* -- GLOBAL VARIABLES --------------------------------------------------- */
+
+/* -- LOCAL VARIABLES ---------------------------------------------------- */
+
+
 // - Animations & bones (includes bones weights)
 // - Multiple UVs
 // - All attributes should be optional, not "forced"
