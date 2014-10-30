@@ -44,9 +44,9 @@ using namespace glm;
 /* -- DATA STRUCTURES ---------------------------------------------------- */
 
 /* -- GLOBAL VARIABLES --------------------------------------------------- */
-GLFWwindow* g_pWindow;
+GLFWwindow* window;
 /* -- LOCAL VARIABLES ---------------------------------------------------- */
-
+static int delta_t = 0;
 
 
 
@@ -67,14 +67,14 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	g_pWindow = glfwCreateWindow(1024, 768, "Computer Animation Project 0", NULL, NULL);
-	if (g_pWindow == NULL)
+	window = glfwCreateWindow(1024, 768, "Computer Animation Project 0", NULL, NULL);
+	if (window == NULL)
 	{
 		fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(g_pWindow);
+	glfwMakeContextCurrent(window);
 
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
@@ -85,8 +85,8 @@ int main(void)
 	}
 
 	// Ensure we can capture the escape key being pressed below
-	glfwSetInputMode(g_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-	glfwSetCursorPos(g_pWindow, 1024 / 2, 768 / 2);
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+	glfwSetCursorPos(window, 1024 / 2, 768 / 2);
 
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -119,7 +119,7 @@ int main(void)
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
-	bool res = loadOBJ("room_thickwalls.obj", vertices, uvs, normals);
+	bool res = loadOBJ("something.obj", vertices, uvs, normals);
 
 	std::vector<unsigned short> indices;
 	std::vector<glm::vec3> indexed_vertices;
@@ -221,6 +221,7 @@ int main(void)
 
 	do
 	{
+		delta_t++;
 
 		// Render to our framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
@@ -249,13 +250,14 @@ int main(void)
 		//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
 
 		glm::mat4 depthModelMatrix = glm::mat4(1.0);
+		depthModelMatrix = glm::rotate(depthModelMatrix, 0.5f * delta_t, vec3(0, 0, 1));
 		glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
 		glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
 
-		// 1rst attribute buffer : vertices
+		// 1st attribute buffer : vertices
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 		glVertexAttribPointer(
@@ -301,6 +303,7 @@ int main(void)
 		glm::mat4 ViewMatrix = getViewMatrix();
 		//ViewMatrix = glm::lookAt(glm::vec3(14,6,4), glm::vec3(0,1,0), glm::vec3(0,1,0));
 		glm::mat4 ModelMatrix = glm::mat4(1.0);
+		ModelMatrix = glm::rotate(ModelMatrix, 0.5f * delta_t, vec3(0, 0, 1));
 		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
 		glm::mat4 biasMatrix(
@@ -416,12 +419,12 @@ int main(void)
 
 
 		// Swap buffers
-		glfwSwapBuffers(g_pWindow);
+		glfwSwapBuffers(window);
 		glfwPollEvents();
 
 	} // Check if the ESC key was pressed or the window was closed
-	while (glfwGetKey(g_pWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-	glfwWindowShouldClose(g_pWindow) == 0);
+	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+	glfwWindowShouldClose(window) == 0);
 
 	// Cleanup VBO and shader
 	glDeleteBuffers(1, &vertexbuffer);
