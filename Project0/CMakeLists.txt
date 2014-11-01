@@ -2,7 +2,6 @@ cmake_minimum_required( VERSION 2.8 )
 
 find_package(OpenGL REQUIRED)
 
-#ADD_DEFINITIONS("-DGLEW_STATIC")
 #ADD_DEFINITIONS("-D_GLFW_USE_OPENGL" "-D_GLFW_WIN32" "-D_GLFW_WGL")
 #add_definitions("-D_GLFW_USE_CONFIG_H")
 
@@ -21,6 +20,8 @@ SET( LINK_LIBS
 	glm
 	glew
 	glfw
+	zlib
+	assimp
 )
 
 parse_directory_name(PROJECT_NAME)

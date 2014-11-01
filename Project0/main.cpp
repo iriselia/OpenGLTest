@@ -124,33 +124,34 @@ int main(void)
 	GLuint Texture = loadDDS("uvmap.DDS");
 
 	// Read our .obj file
+	std::vector<unsigned short> indices;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
-	bool res = loadOBJ("something.obj", vertices, uvs, normals);
+	bool res = loadAssImp("Revent¨®n.obj", indices, vertices, uvs, normals);
 
-	std::vector<unsigned short> indices;
+	std::vector<unsigned short> nope_indices;
 	std::vector<glm::vec3> indexed_vertices;
 	std::vector<glm::vec2> indexed_uvs;
 	std::vector<glm::vec3> indexed_normals;
-	indexVBO(vertices, uvs, normals, indices, indexed_vertices, indexed_uvs, indexed_normals);
+	//indexVBO(vertices, uvs, normals, nope_indices, indexed_vertices, indexed_uvs, indexed_normals);
 
 	// Load it into a VBO
 
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
 	GLuint uvbuffer;
 	glGenBuffers(1, &uvbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, indexed_uvs.size() * sizeof(glm::vec2), &indexed_uvs[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
 
 	GLuint normalbuffer;
 	glGenBuffers(1, &normalbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glBufferData(GL_ARRAY_BUFFER, indexed_normals.size() * sizeof(glm::vec3), &indexed_normals[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 
 	// Generate a buffer for the indices as well
 	GLuint elementbuffer;
@@ -239,7 +240,7 @@ int main(void)
 		// which are already separated from the front faces by a small distance 
 		// (if your geometry is made this way)
 		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
+		glCullFace(GL_FRONT); // Cull back-facing triangles -> draw only front-facing triangles
 
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -258,7 +259,7 @@ int main(void)
 		//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
 
 		glm::mat4 depthModelMatrix = glm::mat4(1.0);
-		depthModelMatrix = glm::rotate(depthModelMatrix, 0.5f * delta_t, vec3(0, 0, 1));
+		//depthModelMatrix = glm::rotate(depthModelMatrix, 0.5f * delta_t, vec3(0, 0, 1));
 		glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
 		// Send our transformation to the currently bound shader, 
@@ -311,7 +312,8 @@ int main(void)
 		glm::mat4 ViewMatrix = getViewMatrix();
 		//ViewMatrix = glm::lookAt(glm::vec3(14,6,4), glm::vec3(0,1,0), glm::vec3(0,1,0));
 		glm::mat4 ModelMatrix = glm::mat4(1.0);
-		ModelMatrix = glm::rotate(ModelMatrix, 0.5f * delta_t, vec3(0, 0, 1));
+		//ModelMatrix = glm::rotate(ModelMatrix, 0.5f * delta_t, vec3(0, 0, 1));
+		ModelMatrix = glm::scale(ModelMatrix, vec3(0.005, 0.005, 0.005));
 		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
 		glm::mat4 biasMatrix(
