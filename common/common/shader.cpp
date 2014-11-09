@@ -80,7 +80,7 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
 
 
 	// Compile Vertex Shader
-	printf("Compiling shader : %s\n", vertShaderPath);
+	printf("Compiling shader : %s\n", vertShaderPath.c_str());
 	char const * VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
 	glCompileShader(VertexShaderID);
@@ -97,7 +97,7 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
 
 
 	// Compile Fragment Shader
-	printf("Compiling shader : %s\n", fragShaderPath);
+	printf("Compiling shader : %s\n", fragShaderPath.c_str());
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
 	glCompileShader(FragmentShaderID);

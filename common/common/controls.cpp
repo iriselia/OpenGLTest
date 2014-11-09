@@ -37,11 +37,11 @@ glm::mat4 ViewMatrix;
 glm::mat4 ProjectionMatrix;
 
 // Initial position : on +Z
-glm::vec3 position = glm::vec3(5, 5, -10);
+glm::vec3 position = glm::vec3(8, 8, 20);
 // Initial horizontal angle : toward -Z
-float horizontalAngle = -0.4f;// 3.14f;
+float horizontalAngle = -3.1f;// 3.14f;
 // Initial vertical angle : none
-float verticalAngle = -0.2f;
+float verticalAngle = -0.1f;
 // Initial Field of View
 float initialFoV = 45.0f;
 
